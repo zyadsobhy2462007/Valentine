@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Our Love Story</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Cairo', sans-serif;
+            background: black;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* تأثير القلوب الطائرة */
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 64, 129, 0.6);
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .heart-bg {
+            position: absolute;
+            width: 80vmin;
+            height: 80vmin;
+            background: rgba(255, 0, 80, 0.2);
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: pulse 4s infinite alternate;
+            z-index: 0;
+        }
+
+        .heart-bg.top-left {
+            top: -20%;
+            left: -20%;
+        }
+
+        .heart-bg.bottom-right {
+            bottom: -20%;
+            right: -20%;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+        }
+
+        .container,
+        .message-screen,
+        .memories-screen,
+        .final-screen {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 85%;
+            width: 380px;
+            position: relative;
+            z-index: 2;
+            /* فوق القلوب */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn 0.8s ease-out;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        #loginScreen {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-heart {
+            font-size: 3.5em;
+            color: #ff4081;
+            margin-bottom: 10px;
+            animation: beat 1.5s infinite;
+        }
+
+        @keyframes beat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        h1,
+        h2 {
+            font-size: 1.6em;
+            margin-bottom: 10px;
+            color: #ffeb3b;
+        }
+
+        .long-message {
+            font-size: 0.95em;
+            line-height: 1.8;
+            text-align: right;
+            direction: rtl;
+            padding: 0 5px;
+            color: #fce4ec;
+        }
+
+        input[type="password"] {
+            width: 80%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            text-align: center;
+            outline: none;
+            font-size: 1em;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff4081, #f72c67);
+            color: #fff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 80%;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 10px 5px;
+        }
+
+        .value {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+
+        .label {
+            font-size: 0.7em;
+            text-transform: uppercase;
+            color: #ffcdd2;
+        }
+
+        .seconds-display {
+            margin: 15px auto 0;
+            width: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .image-carousel {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/3;
+            margin: 15px auto;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .carousel-images {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-images img {
+            width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+            object-fit: cover;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            z-index: 10;
+            font-weight: bold;
+        }
+
+        .carousel-button.left {
+            left: 5px;
+        }
+
+        .carousel-button.right {
+            right: 5px;
+        }
+
+        .i-love-you {
+            font-size: 1.2em;
+            margin-top: 10px;
+            color: #ffeb3b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="heart-bg top-left"></div>
+    <div class="heart-bg bottom-right"></div>
+
+    <div class="container" id="loginScreen">
+        <div class="header-heart">♥️🧸</div>
+        <h1>Enter Password</h1>
+        <p class="subtitle">Our Love Story✨💘</p>
+        <input type="password" id="passwordInput" placeholder="password">
+        <button id="unlockButton">Unlock 💖</button>
+    </div>
+
+    <div class="message-screen" id="messageScreen">
+        <h2>Happy Valentine Day Ya Ro7y❤️</h2>
+        <div class="long-message">
+            بصي هقولك هو إنا مش مستني عيد الحب يجي علشان اكتبلك كلام حلو في يوم زي دا. أنتى من يوم ما دخلتى حياتي وانا
+            حياتي بقيت معاكي حاجه تانيه وعاوز اقولك مش محتاج اكتب بوست لعيد الحب لاني مش بس اليوم ده ال هحبك فيه. كل عيد
+            حب وانتى معايا ي دلوعتي و حبيبت قلبي وكل حاجه ليا💗🏠<br>
+            بصي هوا م بوست اللي هيبين غلاوتك عندي انت كل حاجه ليا يا حبيبتي وقره عيني انتِ اجمل واحلى واغلى حاجه ربنا
+            رزقني بيها من يوم ما دخلتى حياتي كلها انت الحاجه اللي ما ينفعش تتعوض ولا في منها اثنين اللي زيك ما يتقارنش
+            بحد أصلا لآن اللي زيك قليل طبعا انتى عارفه غلاوتك عندي قد ايه لو قعدت اتكلم عنك مش هيكفي في حقك اي كلام
+            يتقال يكفيني انك عارفه انتى بالنسبا لي ايه انتي أجمل واحلى بنوته جت لي في الدنيا كلها انتي الي حياتي مفهاش
+            حلو غيريك اصلا انا محدش بيفرحني غيرك انتِ يروح قلبي. آخر حاجه عاوز اقولهلك أنك احلى صدفه في عمري كل سنه
+            وانتي حبيبتي وقلبي كل عيد حب وانتى سعادتي وضحكتي كل عيد حب وانتي مبسوطه وديما اكون السبب في سعادتك كل عيد حب
+            وانتى منوره حياتي وعمري وتفضلي نورعيني وحبيبه عمرى ويفرحنا يارب قريب ونبق ل بعض هابي فلانتين داي ي روح قلبي
+            ويديمك في حياتي😘<br> كل سنه وانتِ معايا ي دلوعتي🥹♥️🧸
+        </div>
+        <button id="startButton">Show Our Time 💖</button>
+    </div>
+
+    <div class="memories-screen" id="timeScreen">
+        <h2>Our Journey Together🫂</h2>
+        <div class="countdown-grid">
+            <div class="countdown-item">
+                <div class="value" id="days">00</div>
+                <div class="label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="value" id="hours">00</div>
+                <div class="label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="value" id="minutes">00</div>
+                <div class="label">Mins</div>
+            </div>
+        </div>
+        <div class="seconds-display">
+            <div class="value" id="seconds">00</div>
+            <div class="label">Seconds</div>
+        </div>
+        <p style="margin-top:20px; color:#ffcdd2; font-size: 0.9em;">الوقت اللي فات على أول يوم عرفنا فيه
+            بعض😘2025-9-1</b></p>
+        <button id="nextToMemories">Next: Our Memories 😍</button>
+    </div>
+
+    <div class="final-screen" id="finalScreen">
+        <h2>Our Memories💗</h2>
+        <div class="image-carousel">
+            <div class="carousel-images" id="carouselImages">
+                <img src="WhatsApp Image 2026-02-13 at 7.58.59 PM (2).jpeg" alt="1">
+                <img src="WhatsApp Image 2026-02-13 at 7.58.59 PM.jpeg" alt="2">
+                <img src="WhatsApp Image 2026-02-13 at 7.58.59 PM (1).jpeg" alt="3">
+            </div>
+            <button class="carousel-button left" onclick="moveCarousel(-1)">&#10094;</button>
+            <button class="carousel-button right" onclick="moveCarousel(1)">&#10095;</button>
+        </div>
+        <p style="font-size: 0.95em;">معاكِ الدنيا أحلى كتير... بحبك ي دلوعتي و ام عيالي و يارب دايماً نفضل سوا 💖</p>
+        <p class="i-love-you">💗 i Love You Dalo3ty 💗</p>
+    </div>
+
+    <script>
+        const correctPassword = "1sep";
+        const startDate = new Date('2025-09-01T00:00:00');
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 3 + 's';
+            heart.style.opacity = Math.random();
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+
+        setInterval(createHeart, 300);
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.container, .message-screen, .memories-screen, .final-screen')
+                .forEach(s => s.style.display = 'none');
+            const target = document.getElementById(screenId);
+            target.style.display = 'block';
+            target.scrollTop = 0;
+        }
+
+        document.getElementById('unlockButton').onclick = () => {
+            if (document.getElementById('passwordInput').value === correctPassword) {
+                showScreen('messageScreen');
+            } else { alert("ركزي ي دلوعتي واكتبي الباس ورد صح😂❤️"); }
+        };
+
+        document.getElementById('startButton').onclick = () => {
+            showScreen('timeScreen');
+            startTimeCount();
+        };
+
+        document.getElementById('nextToMemories').onclick = () => {
+            showScreen('finalScreen');
+        };
+
+        function startTimeCount() {
+            setInterval(() => {
+                const now = new Date();
+                const diff = now - startDate;
+                document.getElementById('days').textContent = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                document.getElementById('hours').textContent = Math.floor((diff / (1000 * 60 * 60)) % 24).toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = Math.floor((diff / (1000 * 60)) % 60).toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = Math.floor((diff / 1000) % 60).toString().padStart(2, '0');
+            }, 1000);
+        }
+
+        let currentIndex = 0;
+        function moveCarousel(direction) {
+            const carousel = document.getElementById('carouselImages');
+            const imgs = carousel.getElementsByTagName('img');
+            currentIndex = (currentIndex + direction + imgs.length) % imgs.length;
+            carousel.style.transform = `translateX(${-currentIndex * 100}%)`;
+        }
+    </script>
+</body>
+
+</html>
